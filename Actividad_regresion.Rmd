@@ -1,0 +1,66 @@
+---
+title: "Actividad_mod_regresion_lineal"
+author: "Maria Fernanda Rincon"
+date: "2026-09-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+install.packages("readxl")
+library(readxl)
+base<- read_excel("C:/Users/ferna/OneDrive/Semestre 2026-3/Regresion_lineal/Actividad_2_/dataset_rendimiento.xlsx")
+```
+
+## R Markdown
+
+1. Descripción del problema y contexto
+El objetivo es analizar la relación entre horas de estudio (X) y rendimiento académico (Y) en estudiantes.
+Pregunta: ¿A mayor número de horas de estudio, mejora el rendimiento académico?
+
+```{r}
+summary(base)
+ggplot(base, aes(x = horas_estudio, y = rendimiento)) +
+  geom_point(color = "blue") +
+  labs(title = "Dispersión: Horas de estudio vs Rendimiento")
+```
+Se puede observar en la gráfica de dispersión una relación positiva fuerte entre horas de estudios(Independiente) y rendimiento (dependiente).
+
+3.Modelo estimado:
+```{r}
+modelo <- lm(rendimiento ~ horas_estudio, data = base)
+summary(modelo)
+```
+Ecuación estimada:
+
+Rendimiento=𝛽_0+𝛽_1⋅horas_estudio, siendo en este caso:
+𝛽_0= 40.65 (intercept estimate)
+𝛽_1=2.724
+
+Rendimiento=40.65+2.724*horas_estudio
+
+Con respecto al valor p, dado que es muy cercana a 0 se puede concluir que la relación entre horas de estudio y rendimiento es significativa (muy alta).
+
+4. Interpretación de parámetros
+Intercepto (𝛽_0): rendimiento esperado con 0 horas de estudio, en este caso es 40.65
+Pendiente (𝛽_1): incremento promedio en rendimiento por cada hora adicional de estudio, en este caso es 2.724
+
+5.Evaluación de supuestos: 
+
+```{r pressure, echo=FALSE}
+par(mfrow=c(2,2))
+plot(modelo)
+```
+Residuals vs fitted: La grafica muestra los datos distribuidos de manera aleatorio, lo cual comprueba la relación lineal.
+Q-Q Residuals:  los residuos se aproximan a la normalidad.
+Scale-Location: la dispersión es relativamente uniforme; no se observa heterocedasticidad fuerte.
+Residuals vs leverage: los puntos están cerca de cero y no hay valores extremos.
+6. Predicciones:
+```{r}
+nuevos <- data.frame(horas_estudio = c(5, 10, 15))
+predict(modelo, nuevos)
+base
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
